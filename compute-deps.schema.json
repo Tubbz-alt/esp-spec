@@ -1,3 +1,81 @@
 {
-    
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title":"Ecological State Protocol Compute Dependencies Specification",
+    "$ref":"#/definitions/DependencySpec",
+    "definitions": {
+        "DependencySpec": {
+            "type": "object",
+            "properties": {
+                "dependencies": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref":"#/definitions/Dependency"
+                    },
+                    "title": "dependencies"
+                }
+            }
+        },
+        "Dependency": {
+            "anyOf": [
+                {"$ref":"#/definitions/DockerComputeDependency"},
+                {"$ref":"#/definitions/Sentinel2DataDependency"}
+            ]
+        },
+        "DockerComputeDependency": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "compute:docker"
+                    ],
+                    "title": "type"
+                },
+                "image":{
+                    "type": "string",
+                    "description":"A docker image URL. The URL MUST contain an sha256 digest hash for determinism.",
+                    "title":"image"
+                },
+                "input":{
+                    "type":"object",
+                    "description":"The input to pass to the docker compute function as /input.json",
+                    "title":"input"
+                }
+            },
+            "required": [
+                "type", "image", "input"
+            ]
+        },
+        "Sentinel2DataDependency": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "data:sentinel-2"
+                    ],
+                    "title": "type"
+                },
+                "UTM_ZONE": {
+                    "type": "number",
+                    "title": "UTM_ZONE"
+                },
+                "LATITUDE_BAND": {
+                    "type": "string",
+                    "title": "LATITUDE_BAND"
+                },
+                "GRID_SQUARE": {
+                    "type": "string",
+                    "title": "GRID_SQUARE"
+                },
+                "GRANULE_ID": {
+                    "type": "string",
+                    "title": "GRANULE_ID"
+                }
+            },
+            "required": [
+                "type", "UTM_ZONE", "LATITUDE_BAND", "GRID_SQUARE", "GRANULE_ID"
+            ]
+        }
+    }
 }
