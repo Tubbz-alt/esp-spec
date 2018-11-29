@@ -24,3 +24,70 @@ In order to function as a well-behaved docker compute function, the docker image
 
 ### `compute-deps.json` specification
 
+The JSON schema for `compute-deps.json` is described in [./compute-deps.schema.json](./compute-deps.schema.json)
+
+A few example `compute-deps.json` files:
+
+Sample sentinel-2 satellite imagery dependency:
+
+```json
+{
+  "dependencies":{
+    "image1":{
+      "type":"data:sentinel-2",
+      "UTM_ZONE":33,
+      "LATITUDE_BAND":"U",
+      "GRID_SQUARE":"UP",
+      "GRANULE_ID":"S2A_MSIL1C_20150704T101337_N0202_R022_T33UUP_20160606T205155.SAFE"
+    }
+  }
+}
+```
+
+Sample compute task dependency:
+
+```json
+{
+  "dependencies":{
+    "processedImage":{
+      "type":"compute:docker",
+      "image":"example.com/preprocess-sentinel:0.1@sha256:45b23dee08af5e43a7fea6c4cf9c25ccf269ee113168c19722f87876677c5cb2"
+      "input":{
+        "polygon":{
+        "type": "Polygon",
+        "coordinates": [
+          [[-71.47705078125, 38.59970036588819], [-68.09326171875, 38.59970036588819], [-68.09326171875, 40.54720023441049], [-71.47705078125, 40.54720023441049], [-71.47705078125, 38.59970036588819]]]
+        }
+      }
+    }
+  }
+}
+```
+
+`compute-deps.json` should contain a JSON object with the properties described below.
+
+
+#### `dependencies`
+
+A map of keys to dependency objects. The keys in this map should point to the disk file locations where the compute function can expect these dependencies to be mounted in the `/input` directory upon the next invocation. For example, the two examples above would expect dependencies to be mounted in `/input/image1` and `/input/processedImage` respectively.
+
+The type tag of the dependency object describes the type of dependency. The following dependency types are available.
+
+##### `compute:docker`
+
+A compute function described by a docker image as specified in [Docker Compute Functions](#docker-compute-functions). The compute function dependency must contain the following properties:
+
+* `type`: The string literal `"compute:docker"`
+* `image`: The docker image URL for the compute function. This URL **MUST** contain an [SHA256 digest](https://docs.docker.com/engine/reference/commandline/pull/#pull-an-image-by-digest-immutable-identifier) (can be disabled in development mode).
+* `input`: The input object the compute function is to be passed as `/input.json`
+
+
+##### `data:sentinel-2`
+
+Specifies a Sentinel 2 satellite image resource. The following properties are required:
+
+* `type`: The string literal `"data:sentinel-2"`
+* `UTM_ZONE`
+* `LATITUDE_BAND`
+* `GRID_SQUARE`
+* `GRANULE_ID`
