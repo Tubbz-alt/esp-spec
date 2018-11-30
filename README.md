@@ -1,6 +1,6 @@
 # Ecological State Protocol Specification
 
-The primary building blocks of Ecological State Protocols (ESPs) are compute functionsand verification reports. Ideally 
+The primary building blocks of Ecological State Protocols (ESPs) are compute functions and verification reports. Ideally 
 these building blocks will be composed together into pipelines that allow for composition of different compute functions 
 and protocols into larger protocols.
 
