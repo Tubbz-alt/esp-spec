@@ -74,7 +74,7 @@ Sample compute task dependency:
   "dependencies":{
     "processedImage":{
       "type":"compute:docker",
-      "image":"example.com/preprocess-sentinel:0.1@sha256:45b23dee08af5e43a7fea6c4cf9c25ccf269ee113168c19722f87876677c5cb2"
+      "image":"example.com/preprocess-sentinel:0.1@sha256:45b23dee08af5e43a7fea6c4cf9c25ccf269ee113168c19722f87876677c5cb2",
       "input":{
         "polygon":{
         "type": "Polygon",
